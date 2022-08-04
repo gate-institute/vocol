@@ -9,54 +9,6 @@
               <label for="input-search" class="sr-only">Search Tree:</label>
               <i class="search icon"></i>
               <input type="input" id="input-search" placeholder="Type a concept to search..." value="">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
           </div>
           <div class="three wide field">
@@ -73,54 +25,6 @@
                 <div class="ui icon search input">
                   <i class="search icon"></i>
                   <input type="text" placeholder="Select File(s)...">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   </div>
                 <div class="divider"></div>
                 <div id="itemFiles" class="scrolling menu">
@@ -1143,7 +1047,6 @@
           $(allParents).each(function() {
             all(this);
           });
-          debugger;
           return allParents;
         }
 
@@ -1537,9 +1440,9 @@
           if (isURIExist) {
             var endpoint = "./fuseki/dataset/sparql?query="
             if (!anotherQuery)
-              var querystring = 'CONSTRUCT{<' + encodeURIComponent(conceptURI) + '> ?p ?o .}WHERE {<' + encodeURIComponent(conceptURI) + '> ?p ?o .}';
+              var querystring = 'CONSTRUCT{<' + conceptURI + '> ?p ?o .}WHERE {<' + conceptURI + '> ?p ?o .}';
             else
-              var querystring = 'CONSTRUCT{ ?s ?p <' + encodeURIComponent(conceptURI) + '> .}WHERE { ?s ?p <' + encodeURIComponent(conceptURI) + '> .}';
+              var querystring = 'CONSTRUCT{ ?s ?p <' + conceptURI + '> .}WHERE { ?s ?p <' + conceptURI + '> .}';
             $('div.yasqe').empty();
             $.ajax({
               type: 'POST',
