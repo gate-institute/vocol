@@ -33,7 +33,7 @@ var url = process.argv[4]+":" + (process.argv[3] || 3030) + "/connectorData/spar
 console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 console.log(url)
 app.locals.fusekiURL = process.argv[4];
-app.locals.fusekiPortNumber = process.argv[3];
+app.locals.fusekiPortNumber = process.argv[3] || 3030;
 
 console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
@@ -82,93 +82,92 @@ readSyntaxErrorsFile();
 // check if the userConfigurations file is exist
 // for the first time of app running
 var userConfigurationsFile = __dirname +
-  '/jsonDataFiles/userConfigurations.json';
+  '/conf/config.json';
 var repositoryURL = "";
 app.locals.projectTitle = "MobiVoc";
-app.locals.userConfigurations = Array(6).fill(true);
+app.locals.userConfigurations = Array(7).fill(true);
 app.locals.isExistAdminAccount = false;
 app.locals.repositoryURL = "";
 app.locals.repoParam = Array(3).fill("");
 
 function readUserConfigurationFile() {
-  if (fs.existsSync(userConfigurationsFile)) {
-    var data = fs.readFileSync(userConfigurationsFile);
-    if (data.includes('vocabularyName')) {
-      jsonfile.readFile(userConfigurationsFile, function(err, obj) {
-        var menu = Array(7).fill(false);
-        var repoParam = Array(3).fill("");
-        var loginUserName = "";
-        var adminAccount = "";
-        Object.keys(obj).forEach(function(k) {
-          if (k === "vocabularyName") {
-            // store projectTitle to be used by header.ejs
-            app.locals.projectTitle = obj[k];
-          } else if (k === "repositoryURL") {
-            // store repositoryURL to be checked if it was uploaded
-            // for first time or was changed to another repository
-            repositoryURL = obj[k];
-            app.locals.repositoryURL = obj[k];
-          } else if (k === "repositoryOwner") { //repoParam[0]
-            repoParam[0] = obj[k];
-          } else if (k === "repositoryName") { //repoParam[1]
-            repoParam[1] = obj[k];
-          } else if (k === "branchName") { //repoParam[2]
-            repoParam[2] = obj[k];
-          } else if (k === "turtleEditor") { //menu[0]
-            menu[0] = true;
-          } else if (k === "documentationGeneration") { //menu[1]
-            menu[1] = true;
-          } else if (k === "visualization") { //menu[2]
-            menu[2] = true;
-          } else if (k === "sparqlEndPoint") { //menu[3]
-            menu[3] = true;
-          } else if (k === "evolutionReport") { //menu[4]
-            menu[4] = true;
-          } else if (k === "analytics") { //menu[5]
-            menu[5] = true;
-          } else if (k === "infomationProtectionAgreement") {
-            if (obj['text2'] != "") {
-              var dataProtectionHtmlPage = '<% include header.ejs %><div style="margin-top: 3% !important;"></div><div class="ui grid"><div class="ui container">'
-              dataProtectionHtmlPage += obj['text2'];
-              dataProtectionHtmlPage += '</div></div><% include footer .ejs%>';
-              fs.writeFileSync(__dirname + '/views/dataProtection.ejs',
-                dataProtectionHtmlPage, {
-                  encoding: 'utf8',
-                  flag: 'w'
-                });
-            }
-            if (obj['text3'] != "") {
-              menu[6] = true;
-              fs.writeFileSync(__dirname +
-                '/views/dataProtectionScript.ejs', obj['text3'], {
-                  encoding: 'utf8',
-                  flag: 'w'
-                });
-            }
-          } else if (k === "loginUserName") {
-            loginUserName = obj[k];
-          } else if (k === "adminUserName") {
-            adminAccount = obj[k];
-          }
-        });
-        app.locals.userConfigurations = menu;
-        app.locals.repoParam = repoParam;
-        // check if the admin select private mode access of instace
-        if (loginUserName)
-          app.locals.authRequired = true;
-        else
-          app.locals.authRequired = false;
-        // save local variable about existing of admin account
-        if (adminAccount)
-          app.locals.isExistAdminAccount = true;
-        else
-          app.locals.isExistAdminAccount = false;
-      });
+    if (fs.existsSync(userConfigurationsFile)) {
+	var data = fs.readFileSync(userConfigurationsFile);
+	if (data.includes('vocabularyName')) {
+	    obj = jsonfile.readFileSync(userConfigurationsFile);
+	    var menu = Array(7).fill(false);
+	    var repoParam = Array(3).fill("");
+	    var loginUserName = "";
+	    var adminAccount = "";
+	    for (const [k, dummy] of Object.entries(obj)) {
+		if (k === "vocabularyName") {
+		    // store projectTitle to be used by header.ejs
+		    app.locals.projectTitle = obj[k];
+		} else if (k === "repositoryURL") {
+		    // store repositoryURL to be checked if it was uploaded
+		    // for first time or was changed to another repository
+		    repositoryURL = obj[k];
+		    app.locals.repositoryURL = obj[k];
+		} else if (k === "repositoryOwner") { //repoParam[0]
+		    repoParam[0] = obj[k];
+		} else if (k === "repositoryName") { //repoParam[1]
+		    repoParam[1] = obj[k];
+		} else if (k === "branchName") { //repoParam[2]
+		    repoParam[2] = obj[k];
+		} else if (k === "turtleEditor" && obj[k] === "true") { //menu[0]
+		    menu[0] = true;
+		} else if (k === "documentationGeneration" && obj[k] === "true") { //menu[1]
+		    menu[1] = true;
+		} else if (k === "visualization" && obj[k] === "true") { //menu[2]
+		    menu[2] = true;
+		} else if (k === "sparqlEndPoint" && obj[k] === "true") { //menu[3]
+		    menu[3] = true;
+		} else if (k === "evolutionReport" && obj[k] === "true") { //menu[4]
+		    menu[4] = true;
+		} else if (k === "analytics" && obj[k] === "true") { //menu[5]
+		    menu[5] = true;
+		} else if (k === "infomationProtectionAgreement") {
+		    if (obj['text2'] != "") {
+			var dataProtectionHtmlPage = '<% include header.ejs %><div style="margin-top: 3% !important;"></div><div class="ui grid"><div class="ui container">'
+			dataProtectionHtmlPage += obj['text2'];
+			dataProtectionHtmlPage += '</div></div><% include footer .ejs%>';
+			fs.writeFileSync(__dirname + '/views/dataProtection.ejs',
+					 dataProtectionHtmlPage, {
+					     encoding: 'utf8',
+					     flag: 'w'
+					 });
+		    }
+		    if (obj['text3'] != "") {
+			menu[6] = true;
+			fs.writeFileSync(__dirname +
+					 '/views/dataProtectionScript.ejs', obj['text3'], {
+					     encoding: 'utf8',
+					     flag: 'w'
+					 });
+		    }
+		} else if (k === "loginUserName") {
+		    loginUserName = obj[k];
+		} else if (k === "adminUserName") {
+		    adminAccount = obj[k];
+		}
+	    }
+	    app.locals.userConfigurations = menu;
+	    app.locals.repoParam = repoParam;
+	    // check if the admin select private mode access of instace
+	    if (loginUserName)
+		app.locals.authRequired = true;
+	    else
+		app.locals.authRequired = false;
+	    // save local variable about existing of admin account
+	    if (adminAccount)
+		app.locals.isExistAdminAccount = true;
+	    else
+		app.locals.isExistAdminAccount = false;
+	}
     }
-  }
 }
-readUserConfigurationFile();
 
+readUserConfigurationFile();
 
 // check if the user has an error and this was for first time or
 // when user has changed to another repositoryURL
@@ -198,7 +197,7 @@ app.use(session({
 // redirect to /config for first time if userConfigurations.json does not exsit
 app.get('*', function(req, res, next) {
   var userConfigurationsFile2 = __dirname +
-    '/jsonDataFiles/userConfigurations.json';
+    '/conf/config.json';
   var data = fs.readFileSync(userConfigurationsFile2, "utf8");
   if (!data.includes("adminUserName"))
     res.render('config', {
@@ -232,8 +231,7 @@ app.use(['\/\/config', '/config'], config);
 app.use(['\/\/sparqlServer', '/sparqlServer'], sparqlServer);
 
 
-app.use(['\/\/fuseki/', '/fuseki/'], proxy('localhost:' + process.argv.slice(2)[
-    1] || 3030 + '/', {
+app.use(['\/\/fuseki/', '/fuseki/'], proxy(app.locals.fusekiURL + ':' + app.locals.fusekiPortNumber + '/', {
     proxyReqPathResolver: function(req) {
       if (req.method === 'POST')
         return require('url').parse(req.url).path + "?query=" + escape(

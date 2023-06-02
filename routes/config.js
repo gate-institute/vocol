@@ -14,7 +14,7 @@ var escapeHtml = require('escape-html');
 router.post('/', function(req, res) {
   // check if the userConfigurations file is exist
   // for the first time of app running
-  var filepath = "jsonDataFiles/userConfigurations.json";
+  var filepath = "conf/config.json";
   var isAdminPasswordModified = true,
     isPrivateLoginPasswordModified = true;
   jsonfile.readFile(filepath, function(err, obj)  {
@@ -144,7 +144,7 @@ router.get('/', function(req, res) {
   } else {
     // check if the userConfigurations file is exist
     // for the first time of app running
-    var filepath = "jsonDataFiles/userConfigurations.json";
+    var filepath = "conf/config.json";
     jsonfile.readFile(filepath, function(err, obj)  {
       if (err)
         throw err;  

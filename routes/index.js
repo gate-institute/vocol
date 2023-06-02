@@ -121,7 +121,7 @@ router.get('/', function(req, res) {
             }
             // check if the userConfigurations file is exist
             // for the first time of app running
-            var path = "jsonDataFiles/userConfigurations.json";
+            var path = "conf/config.json";
             fs.exists(path, function(exists) {
               var data = fs.readFileSync(path);
               if (exists && data.includes('vocabularyName')) {
@@ -162,7 +162,7 @@ router.get('/', function(req, res) {
       // } else {
       //   // check if the userConfigurations file is exist
       //   // for the first time of app running
-      //   var path = "jsonDataFiles/userConfigurations.json";
+      //   var path = "conf/config.json";
       //   fs.exists(path, function(exists) {
       //     var data = fs.readFileSync(path);
       //     if (exists && data.includes('vocabularyName')) {

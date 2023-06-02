@@ -11,7 +11,7 @@ var path = require('path');
 var spawn = require('child_process').spawn;
 
 router.post('/', function(req, res) {
-  var path = "jsonDataFiles/userConfigurations.json";
+  var path = "conf/config.json";
   fs.exists(path, function(exists) {
     if (exists) {
       jsonfile.readFile(path, function(err, obj) {

@@ -55,7 +55,7 @@ define(['jquery', 'github', 'N3', 'lib/codemirror',
       currentRepoBranch = "",
       currentCommit = "";
     initialCommit = "";
-    // get some repo. information four userConfigurations.json file to be used in this editor
+    // get some repo. information four config.json file to be used in this editor
       (function setRepoInfo() {
         $.ajax({
           type: "GET",
@@ -169,7 +169,7 @@ define(['jquery', 'github', 'N3', 'lib/codemirror',
         // TODO:
         // the next call is redundant: branch already contains list of files,
         // and this should not be "master" but the selected branch:
-        var tree = repo.git.getTree("master", null)
+        var tree = repo.git.getTree(branchname, null)
           .done(function(tree) {
             for (var i = 0; i < tree.length; i++) {
               if (tree[i].path.endsWith(".ttl")) {

@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 
   // check if the userConfigurations file is exist
   // for the first time of app running
-  var path = "jsonDataFiles/userConfigurations.json";
+  var path = "conf/config.json";
   fs.exists(path, function(exists) {
     if (exists) {
       jsonfile.readFile(path, function(err, obj) {

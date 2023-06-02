@@ -11,7 +11,7 @@ var session = require('express-session');
 
 
 router.post('/', function(req, res) {
-  var path = "jsonDataFiles/userConfigurations.json";
+  var path = "conf/config.json";
   fs.exists(path, function(exists) {
     if (exists) {
       var data = fs.readFileSync(path);
